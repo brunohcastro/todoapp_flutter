@@ -6,8 +6,7 @@ class Todo {
   final String description;
   final bool completed;
 
-  const Todo(
-      {@required this.id, @required this.description, this.completed = false});
+  const Todo({this.id, @required this.description, this.completed = false});
 
   Todo copyWith({int id, String description, bool completed}) {
     return Todo(
@@ -20,4 +19,20 @@ class Todo {
       : id = json['id'],
         description = json['description'],
         completed = json['completed'];
+
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'description': description, 'completed': completed};
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Todo && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
+  String toString() {
+    return 'Todo{id: $id, description: $description, completed: $completed}';
+  }
 }

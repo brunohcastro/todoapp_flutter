@@ -4,27 +4,27 @@ import 'package:todoappflutter/model/todo.dart';
 @immutable
 class ViewModelDTO {
   final int todoCount;
-  final int pendingTodosCount;
-  final int completedTodosCount;
+  final int pendingTodoCount;
+  final int completedTodoCount;
 
   final List<Todo> todos;
 
   ViewModelDTO(
       {this.todoCount = 0,
-      this.pendingTodosCount = 0,
-      this.completedTodosCount = 0,
+      this.pendingTodoCount = 0,
+      this.completedTodoCount = 0,
       this.todos = const <Todo>[]});
 
   ViewModelDTO copyWith(
       {int todoCount,
-      int pendingTodosCount,
-      int completedTodosCount,
-      List<Todo> todos}) {
+      int pendingTodoCount,
+      int completedTodoCount,
+      List<Todo> todoList}) {
     return ViewModelDTO(
         todoCount: todoCount ?? this.todoCount,
-        pendingTodosCount: pendingTodosCount ?? this.pendingTodosCount,
-        completedTodosCount: completedTodosCount ?? this.completedTodosCount,
-        todos: todos ?? this.todos);
+        pendingTodoCount: pendingTodoCount ?? this.pendingTodoCount,
+        completedTodoCount: completedTodoCount ?? this.completedTodoCount,
+        todos: todoList ?? this.todos);
   }
 
   factory ViewModelDTO.fromJson(Map<String, dynamic> json) {
@@ -34,8 +34,8 @@ class ViewModelDTO {
 
     return ViewModelDTO(
         todoCount: json['todoCount'],
-        pendingTodosCount: json['pendingTodosCount'],
-        completedTodosCount: json['completedTodosCount'],
+        pendingTodoCount: json['pendingTodosCount'],
+        completedTodoCount: json['completedTodosCount'],
         todos: todos);
   }
 }
