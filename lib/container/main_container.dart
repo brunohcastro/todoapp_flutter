@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:todoappflutter/component/loading_barrier.dart';
+import 'package:todoappflutter/container/todo_list_container.dart';
 import 'package:todoappflutter/model/app_state.dart';
 import 'package:todoappflutter/redux/thunks.dart';
-import 'package:todoappflutter/container/todo_list_container.dart';
 
 class MainContainer extends StatelessWidget {
   @override

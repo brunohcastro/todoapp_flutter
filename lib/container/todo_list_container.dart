@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -13,7 +14,7 @@ class TodoListStoreContract {
   ViewModel viewModel;
 
   Function(Completer completer) fetchTodos;
-  Function(int id) toggleStatus;
+  Function(Todo todo) toggleStatus;
   Function(Todo todo) delete;
 
   TodoListStoreContract(Store<AppState> store) {
@@ -21,7 +22,8 @@ class TodoListStoreContract {
 
     this.fetchTodos =
         (Completer completer) => store.dispatch(fetchAllTodos(completer));
-    this.toggleStatus = (int id) => store.dispatch(toggleTodoStatus(id: id));
+    this.toggleStatus =
+        (Todo todo) => store.dispatch(toggleTodoStatus(todo: todo));
     this.delete = (Todo todo) => store.dispatch(deleteTodo(todo: todo));
   }
 }
@@ -68,10 +70,19 @@ class TodoList extends StatelessWidget {
 
 class TodoListItem extends StatelessWidget {
   final Todo item;
-  final Function(int id) toggleStatus;
+  final Function(Todo todo) toggleStatus;
   final Function(Todo todo) delete;
 
   TodoListItem(this.item, this.toggleStatus, this.delete);
+
+  TextStyle _textStyle() {
+    if (item.completed == true) {
+      return TextStyle(
+          decoration: TextDecoration.lineThrough, color: Colors.grey);
+    } else {
+      return TextStyle(decoration: TextDecoration.none, color: Colors.black87);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,19 +90,14 @@ class TodoListItem extends StatelessWidget {
       delegate: SlidableBehindDelegate(),
       child: Container(
           color: Colors.white,
+          padding: EdgeInsets.fromLTRB(0, 10.0, 0, 10.0),
           child: ListTile(
-            title: Padding(
-                padding: EdgeInsets.fromLTRB(0, 20.0, 0, 20.0),
-                child: Text(
-                  item.description,
-                  style: TextStyle(
-                      decoration: item.completed
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
-                      color: item.completed ? Colors.grey : Colors.black87),
-                )),
+            title: Text(
+              item.description,
+              style: _textStyle(),
+            ),
             leading: Checkbox(
-                value: item.completed, onChanged: (_) => toggleStatus(item.id)),
+                value: item.completed, onChanged: (_) => toggleStatus(item)),
           )),
       secondaryActions: <Widget>[
         IconSlideAction(

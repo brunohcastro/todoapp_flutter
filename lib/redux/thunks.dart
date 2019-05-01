@@ -6,8 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:todoappflutter/model/app_state.dart';
-import 'package:todoappflutter/model/view_model.dart';
 import 'package:todoappflutter/model/todo.dart';
+import 'package:todoappflutter/model/view_model.dart';
 import 'package:todoappflutter/redux/actions.dart';
 
 const String baseUrl = 'https://todoing-app.herokuapp.com/api';
@@ -20,8 +20,7 @@ ThunkAction<AppState> fetchAllTodos([Completer<Null> completer]) {
       store.dispatch(Action.LoadingData);
     }
 
-    http.Response response =
-        await http.get('$baseUrl/todos');
+    http.Response response = await http.get('$baseUrl/todos');
 
     dynamic result = json.decode(response.body);
 
@@ -37,15 +36,15 @@ ThunkAction<AppState> fetchAllTodos([Completer<Null> completer]) {
 }
 
 ThunkAction<AppState> toggleTodoStatus(
-    {@required int id, Completer<Null> completer}) {
+    {@required Todo todo, Completer<Null> completer}) {
   return (Store<AppState> store) async {
     debugPrint('toggleTodoStatus()');
     store.dispatch(Action.LoadingData);
 
-    await http.patch('$baseUrl/todos/$id/toggle');
+    await http.patch('$baseUrl/todos/${todo.id}/toggle');
 
     debugPrint('dispatch(ToggleTodoAction)');
-    store.dispatch(ToggleTodoAction(id));
+    store.dispatch(ToggleTodoAction(todo));
 
     store.dispatch(Action.DataLoaded);
 

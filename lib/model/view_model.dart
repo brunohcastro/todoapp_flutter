@@ -1,11 +1,13 @@
+import 'package:flutter/foundation.dart';
 import 'package:todoappflutter/model/todo.dart';
 
+@immutable
 class ViewModel {
-  int todoCount;
-  int pendingTodosCount;
-  int completedTodosCount;
+  final int todoCount;
+  final int pendingTodosCount;
+  final int completedTodosCount;
 
-  List<Todo> todos;
+  final List<Todo> todos;
 
   ViewModel(
       {this.todoCount = 0,
@@ -25,14 +27,15 @@ class ViewModel {
         todos: todos ?? this.todos);
   }
 
-  ViewModel.fromJson(Map<String, dynamic> json) {
+  factory ViewModel.fromJson(Map<String, dynamic> json) {
     var todoList = json['todos'] as List;
 
     List<Todo> todos = todoList.map((it) => Todo.fromJson(it)).toList();
 
-    this.todoCount = json['todoCount'];
-    this.pendingTodosCount = json['pendingTodosCount'];
-    this.completedTodosCount = json['completedTodosCount'];
-    this.todos = todos;
+    return ViewModel(
+        todoCount: json['todoCount'],
+        pendingTodosCount: json['pendingTodosCount'],
+        completedTodosCount: json['completedTodosCount'],
+        todos: todos);
   }
 }

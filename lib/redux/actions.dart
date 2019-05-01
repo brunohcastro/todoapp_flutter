@@ -1,39 +1,39 @@
-import 'package:todoappflutter/model/view_model.dart';
+import 'package:flutter/foundation.dart';
 import 'package:todoappflutter/model/todo.dart';
+import 'package:todoappflutter/model/view_model.dart';
 
-enum Action {
-  DeleteAllTodos,
-  ToggleAllTodos,
-  LoadingData,
-  DataLoaded
-}
+enum Action { DeleteAllTodos, ToggleAllTodos, LoadingData, DataLoaded }
 
+@immutable
 class AddTodoAction {
-  String _content;
+  final String _content;
 
   String get content => this._content;
 
   AddTodoAction(this._content);
 }
 
+@immutable
 class DeleteTodoAction {
-  Todo _todo;
+  final Todo _todo;
 
   Todo get todo => this._todo;
 
   DeleteTodoAction(this._todo);
 }
 
+@immutable
 class ToggleTodoAction {
-  int _id;
+  final Todo _todo;
 
-  int get id => this._id;
+  Todo get todo => this._todo;
 
-  ToggleTodoAction(this._id);
+  ToggleTodoAction(this._todo);
 }
 
+@immutable
 class LoadTodosAction {
-  ViewModel _viewModel;
+  final ViewModel _viewModel;
 
   ViewModel get viewModel => this._viewModel;
 
