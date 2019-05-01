@@ -6,25 +6,39 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:redux/redux.dart';
 import 'package:todoappflutter/model/app_state.dart';
 import 'package:todoappflutter/model/todo.dart';
-import 'package:todoappflutter/model/view_model.dart';
 import 'package:todoappflutter/redux/thunks.dart';
 
 /// The contract between the TodoList and the Store
-class TodoListStoreContract {
-  ViewModel viewModel;
+class TodoListViewModel {
+  final List<Todo> todos;
+  final int todoCount;
+  final int completedTodosCount;
+  final int pendingTodosCount;
 
-  Function(Completer completer) fetchTodos;
-  Function(Todo todo) toggleStatus;
-  Function(Todo todo) delete;
+  final Function(Completer completer) fetchTodos;
+  final Function(Todo todo) toggleStatus;
+  final Function(Todo todo) delete;
 
-  TodoListStoreContract(Store<AppState> store) {
-    this.viewModel = store.state.viewModel;
+  TodoListViewModel(
+      {this.todos,
+      this.todoCount,
+      this.completedTodosCount,
+      this.pendingTodosCount,
+      this.fetchTodos,
+      this.toggleStatus,
+      this.delete});
 
-    this.fetchTodos =
-        (Completer completer) => store.dispatch(fetchAllTodos(completer));
-    this.toggleStatus =
-        (Todo todo) => store.dispatch(toggleTodoStatus(todo: todo));
-    this.delete = (Todo todo) => store.dispatch(deleteTodo(todo: todo));
+  factory TodoListViewModel.fromStore(Store<AppState> store) {
+    return TodoListViewModel(
+        todos: store.state.todos,
+        todoCount: store.state.todoCount,
+        completedTodosCount: store.state.completedTodosCount,
+        pendingTodosCount: store.state.pendingTodosCount,
+        fetchTodos: (Completer completer) =>
+            store.dispatch(fetchAllTodos(completer)),
+        toggleStatus: (Todo todo) =>
+            store.dispatch(toggleTodoStatus(todo: todo)),
+        delete: (Todo todo) => store.dispatch(deleteTodo(todo: todo)));
   }
 }
 
@@ -32,21 +46,21 @@ class TodoListStoreContract {
 class TodoListContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, TodoListStoreContract>(
-        converter: (store) => TodoListStoreContract(store),
+    return StoreConnector<AppState, TodoListViewModel>(
+        converter: (store) => TodoListViewModel.fromStore(store),
         builder: (_, contract) => TodoList(contract));
   }
 }
 
 class TodoList extends StatelessWidget {
-  final TodoListStoreContract contract;
+  final TodoListViewModel _viewModel;
 
-  TodoList(this.contract);
+  TodoList(this._viewModel);
 
   Future<Null> handleRefresh() {
     Completer<Null> completer = Completer<Null>();
 
-    contract.fetchTodos(completer);
+    _viewModel.fetchTodos(completer);
     return completer.future;
   }
 
@@ -59,11 +73,11 @@ class TodoList extends StatelessWidget {
                   color: Colors.black12,
                   height: 1,
                 ),
-            itemCount: contract.viewModel.todoCount,
+            itemCount: _viewModel.todoCount,
             itemBuilder: (context, position) => TodoListItem(
-                contract.viewModel.todos[position],
-                contract.toggleStatus,
-                contract.delete)),
+                _viewModel.todos[position],
+                _viewModel.toggleStatus,
+                _viewModel.delete)),
         onRefresh: handleRefresh);
   }
 }

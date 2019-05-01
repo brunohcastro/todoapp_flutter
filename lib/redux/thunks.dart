@@ -7,7 +7,7 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:todoappflutter/model/app_state.dart';
 import 'package:todoappflutter/model/todo.dart';
-import 'package:todoappflutter/model/view_model.dart';
+import 'package:todoappflutter/model/view_model_dto.dart';
 import 'package:todoappflutter/redux/actions.dart';
 
 const String baseUrl = 'https://todoing-app.herokuapp.com/api';
@@ -25,7 +25,7 @@ ThunkAction<AppState> fetchAllTodos([Completer<Null> completer]) {
     dynamic result = json.decode(response.body);
 
     debugPrint('dispatch(LoadTodosAction)');
-    store.dispatch(LoadTodosAction(ViewModel.fromJson(result)));
+    store.dispatch(LoadTodosAction(ViewModelDTO.fromJson(result)));
 
     if (completer != null) {
       completer.complete();

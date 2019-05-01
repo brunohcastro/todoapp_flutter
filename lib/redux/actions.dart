@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:todoappflutter/model/todo.dart';
-import 'package:todoappflutter/model/view_model.dart';
+import 'package:todoappflutter/model/view_model_dto.dart';
 
 enum Action { DeleteAllTodos, ToggleAllTodos, LoadingData, DataLoaded }
 
@@ -33,9 +33,9 @@ class ToggleTodoAction {
 
 @immutable
 class LoadTodosAction {
-  final ViewModel _viewModel;
+  final ViewModelDTO _viewModel;
 
-  ViewModel get viewModel => this._viewModel;
+  ViewModelDTO get viewModel => this._viewModel;
 
   LoadTodosAction(this._viewModel);
 }
